@@ -5,8 +5,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class Consultar {
-    private final API api_key = API.APIKEY;
-    private final String url = "https://v6.exchangerate-api.com/v6/"+this.api_key+"/pair/";
+    private final String url = "https://v6.exchangerate-api.com/v6/9a9af8ee96004902e2af2a67/pair/";
 
     public String Consultar(String base_code, String target_code, Double amount){
         try {

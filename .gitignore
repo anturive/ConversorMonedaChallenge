@@ -3,6 +3,8 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+src/API.java
+
 ### Eclipse ###
 .apt_generated
 .classpath

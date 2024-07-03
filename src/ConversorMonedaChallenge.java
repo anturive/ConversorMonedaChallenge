@@ -4,15 +4,16 @@ import java.util.*;
 
 public class ConversorMonedaChallenge {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String json = "";
-        int option = 0;
-        double valor;
-        DateFormat formato = new SimpleDateFormat("HH:mm:ss");
-        Map<String, Map<Moneda,Double>> historial = new HashMap<>();
+        try {
+            Scanner sc = new Scanner(System.in);
+            String json = "";
+            int option = 0;
+            double valor;
+            DateFormat formato = new SimpleDateFormat("HH:mm:ss");
+            Map<String, Map<Moneda,Double>> historial = new HashMap<>();
 
-        while(option != 8){
-            System.out.println("""
+            while(option != 8){
+                System.out.println("""
                 *****************************************
                 Sea bienvenido/a al Conversor de Moneda
                 1) Dólar =>> Peso argentino
@@ -25,42 +26,59 @@ public class ConversorMonedaChallenge {
                 8) Salir
                 Elija una opción válida:
                 *****************************************""");
-            option = sc.nextInt();
-            if(option != 7 && option != 8){
-                System.out.println("Ingrese el valor que deseas convertir:");
-                valor = sc.nextDouble();
-                json = menu(option,valor,json);
-                Moneda moneda = convertirJson(json);
-                Map<Moneda,Double> monedas = new HashMap<>();
-                monedas.put(moneda,valor);
+                option = sc.nextInt();
+                if(option == 1 || option == 2 || option == 3 || option == 4 || option == 5 || option == 6){
+                    try {
+                        System.out.println("Ingrese el valor que deseas convertir:");
+                        valor = sc.nextDouble();
+                        json = menu(option,valor,json);
+                        Moneda moneda = convertirJson(json);
+                        Map<Moneda,Double> monedas = new HashMap<>();
+                        monedas.put(moneda,valor);
 
-                Date tiempo = new Date();
-                historial.put(formato.format(tiempo.getTime()),monedas);
+                        Date tiempo = new Date();
+                        historial.put(formato.format(tiempo.getTime()),monedas);
 
-                System.out.println("El valor "+valor+" ["+moneda.base_code()+"] corresponde al valor final de =>>> "+
-                        moneda.conversion_result()+"["+
-                        moneda.target_code()+"]");
-
-            }else if(option == 7){
-                List<String> horasOrdenadas = new ArrayList<>(historial.keySet());
-                Collections.sort(horasOrdenadas);
-
-                System.out.println("------------HISTORIAL DE CONVERSIONES------------");
-
-                for(String hora :horasOrdenadas){
-                    System.out.println("Hora: " + hora);
-                    for(Moneda moneda : historial.get(hora).keySet()){
-                        System.out.println("Moneda Base: " + moneda.base_code());
-                        System.out.println("Moneda Target: " + moneda.target_code());
-                        double valorIngresado = historial.get(hora).get(moneda);
-                        System.out.println("Valor de entrada: " + valorIngresado);
-                        System.out.println("Valor de conversión : " + moneda.conversion_result());
-                        System.out.println("------------------------------------------------");
+                        System.out.println("El valor "+valor+" ["+moneda.base_code()+"] corresponde al valor final de =>>> "+
+                                moneda.conversion_result()+"["+
+                                moneda.target_code()+"]");
+                    }catch (InputMismatchException e){
+                        System.out.println("Error: Se esperaba una cantidad para convertir");
+                        System.out.println("Finalizando aplicación");
+                        option = 8;
                     }
+                }else if(option == 7){
+                    List<String> horasOrdenadas = new ArrayList<>(historial.keySet());
+                    Collections.sort(horasOrdenadas);
+
+                    System.out.println("------------HISTORIAL DE CONVERSIONES------------");
+
+                    for(String hora :horasOrdenadas){
+                        System.out.println("Hora: " + hora);
+                        for(Moneda moneda : historial.get(hora).keySet()){
+                            System.out.println("Moneda Base: " + moneda.base_code());
+                            System.out.println("Moneda Target: " + moneda.target_code());
+                            double valorIngresado = historial.get(hora).get(moneda);
+                            System.out.println("Valor de entrada: " + valorIngresado);
+                            System.out.println("Valor de conversión : " + moneda.conversion_result());
+                            System.out.println("------------------------------------------------");
+                        }
+                    }
+                } else if (option == 8) {
+                    System.out.println("Gracias por usar la aplicación!!!");
+                    return;
+                }else{
+                    System.out.println("Valor incorrecto");
+                    System.out.println("Finalizando aplicación");
+                    return;
                 }
             }
+        }catch (InputMismatchException e){
+            System.out.println("Error: se esperaba un número del 1 al 8");
+            System.out.println("Finalizando aplicación");
         }
     }
+
     private static String menu(int option, double valor, String json){
         Consultar consultar = new Consultar();
         switch (option){
